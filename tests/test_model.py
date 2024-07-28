@@ -10,7 +10,7 @@ class TestRanking(unittest.TestCase):
         def test_update_ranking(self):
                 ranking = Ranking(player_id='123', rank='Bronze', points=0)
                 ranking.update_ranking(10)
-                self.assertEqual(ranking.points, 15)
+                self.assertEqual(ranking.points, 10)
                 print(f"Player ID: {ranking.player_id}, Points: {ranking.points}")
 
 if __name__ == '__main__':

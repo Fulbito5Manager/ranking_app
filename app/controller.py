@@ -12,7 +12,7 @@ def handle_event(event_data):
     team2_data = get_team_data(event_data['team_id'], event_data['jwt'])
     
     team1 = Team(team1_data['id'], team1_data['jugadores'])
-    team2 = Team(team1_data['id'], team1_data['jugadores'])
+    team2 = Team(team2_data['id'], team2_data['jugadores'])
 
     ranking_data = calculate_ranking(player_data, event_data['winner_team_id'], team1, team2) # add team_data
     # matches_history = Matches_history(event_data['match_date'], event_data['result']) # also to compare teams I need a team list from both teams
