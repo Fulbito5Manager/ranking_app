@@ -1,4 +1,5 @@
 # docker commands I use for running
 docker_commands.txt
+
 # Ignore pycache unnecessary
 **/__pycache__/
