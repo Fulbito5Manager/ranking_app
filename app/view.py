@@ -15,8 +15,8 @@ def ranking_view(ranking):
         'points': ranking.points
     })
 
-#def team_view(team):
-    # return jsonify({
-    #     'team_id': team.team_id, 
-    #     'team_list': team.team_list
-    # })
+# def team_view(team):
+#     return jsonify({
+#         'team_id': team.team_id, 
+#         'team_list': team.team_list
+#     })
