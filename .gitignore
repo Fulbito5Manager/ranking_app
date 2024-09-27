@@ -1,5 +1,10 @@
 # docker commands I use for running
-docker_commands.txt
+instance/database.db
+./app/docker_commands.txt
 
 # Ignore pycache unnecessary
-*/__pycache__/*
+# */__pycache__/*
+
+__pycache__
+*.db
+instance
