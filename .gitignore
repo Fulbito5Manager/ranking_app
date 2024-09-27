@@ -2,4 +2,4 @@
 docker_commands.txt
 
 # Ignore pycache unnecessary
-**/__pycache__/
+*/__pycache__/*
