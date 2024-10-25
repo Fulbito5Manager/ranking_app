@@ -58,7 +58,7 @@ class TestPlayerService(unittest.TestCase):
     def test_handle_calculate_ranking(self, mock_create_new_player, mock_add_player_to_db, mock_determine_rank, mock_get_rank_by_players_id, mock_is_player_indb, mock_get_teams_data_by_match_id, mock_get_winner_team_id_by_match_id):
         
         # Mock external service data
-        mock_get_winner_team_id_by_match_id.return_value = 24  # Mock winner team ID
+        mock_get_winner_team_id_by_match_id.return_value = 1 
         
         mock_get_teams_data_by_match_id.return_value = (
             {'id': 1, 'jugadores': [1, 2, 3, 4, 5]},  # Team A players

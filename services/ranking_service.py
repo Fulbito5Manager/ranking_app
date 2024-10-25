@@ -23,7 +23,7 @@ def calculate_player_ranking(match_id):
 
     for team_id in [team_a_data['id'], team_b_data['id']]:
 
-        team_list = get_teams_data_by_match_id(team_id) # LIST
+        team_list = team_a_data['jugadores'] if team_id in team_a_data['jugadores'] else team_b_data['jugadores'] # LIST
         total_players_per_team = len(team_list)
         
         # points = get_ranking(rankings_team1, rankings_team2, match_result, total_player_per_team) # OLD 
@@ -35,18 +35,19 @@ def calculate_player_ranking(match_id):
             player_match_result = is_team_winner(winner_team_id, team_id)
             points = get_ranking(player_match_result, total_players_per_team, rankings_teamA, rankings_teamB)
 
-            player_data = is_player_indb(player_id)
-            if player_data is None:
-                player_data = create_new_player(player_id)
-                add_player_to_db(player_data)
+            player_db_data = is_player_indb(player_id)
+            if player_db_data is None:
+                player_db_data = create_new_player(player_id)
+                add_player_to_db(player_db_data)
 
-            player_data.points = points + player_data.points
+            player_db_data.points = points + player_db_data.points
             #try and except
             rank = determine_rank(points)
             
             print("see if works:", points, rank)
 
-            return {'rank': player_data.rank, 'points': player_data.points}
+            # return {'rank': player_data.rank, 'points': player_data.points}
+            print('rank: ',player_db_data.rank, 'points: ',player_db_data.points, "player id: ", player_id, "team :", team_id)
 
 def get_ranking(match_result, total_player_per_team, rankings_teamA, rankings_teamB):
 
