@@ -1,12 +1,16 @@
 from confluent_kafka import Consumer, KafkaException
 import requests, json
-from services.match_service import create_match
+from services.match_service import create_match, get_winner_team_id_by_match_id
+from services.player_service import bring_old_and_new_players, update_old_players, handle_new_players, calculate_player_ranking
 from config import BOOTSTRAP_SERVER_RUNNING, KAFKA_GROUP_ID
 import threading
 from confluent_kafka import KafkaError, KafkaException
 from app import create_app
+from models.player_model import Player
 
 app = create_app()
+
+MATCH_STATUS_FINISHED = "finished"
 
 # Consumer setup
 consumer = Consumer({
@@ -16,21 +20,23 @@ consumer = Consumer({
 })
 
 # Subscribe to the topics
-topics = ['partidos-updates'] #'equipos-updates', 'jugadores-updates'
+topics = ['partidos-updates'] #'equipos-updates', "jugadores-service-update", jugadores-service-update
 consumer.subscribe(topics)
 
 def get_message_from_kafka(consumer, timeout=1.0):
     """ A wrapper to poll a message from Kafka """
     return consumer.poll(timeout=timeout)
 
-def handle_partidos_update(data):
-    try:
-        match_status = data.get('estado')
-        STATUS_FINISHED = "finished" # Context + Not hardcoded. Contants* Are BETTER
-        print("Handle partido update message received. Data: ", data)
+def handle_partidos_update(match_event_data): # I will only get Partido ID
 
-        if match_status == STATUS_FINISHED:
-            create_match(data)
+    try:
+        match_status = match_event_data.get('estado')
+        
+        print("Handle partido update message received. match_event_data: ", match_event_data)
+
+        if match_status == MATCH_STATUS_FINISHED:
+
+            calculate_player_ranking(match_event_data['partidoID'])
 
     except Exception as e:
         print(f"Error handling partido update: {e}")
@@ -68,6 +74,7 @@ def consume_message(message):
     try:
         # Deserialize the message value
         data = json.loads(message.value().decode('utf-8'))
+        print('data:', data)
 
         # Handle the message based on the topic
         if message.topic() == 'partidos-updates':

@@ -1,8 +1,8 @@
 from flask import request, jsonify, blueprints, Blueprint
-from services.ranking_service import calculate_ranking
+from services.ranking_service import calculate_player_ranking
 import requests
 from services.player_service import is_player_indb, create_new_player
-from services.match_service import is_match_indb, bring_api_teams_by_match_id
+from services.match_service import is_match_indb
 
 ranking_controller = Blueprint('ranking_controller', __name__)
 
@@ -14,30 +14,12 @@ date.
 
 """
 
-@ranking_controller.route('/rank/<int:player_id>/<int:match_id>', methods=['GET'])
+@ranking_controller.route('/rank/<int:match_id>', methods=['GET'])
 def get_rank_by_match_id(match_id, player_id):
 
-    found_match = is_match_indb(match_id)
-    found_player = is_player_indb(player_id)
+    # I could add points gained based on match id.
 
-    if (found_player == False):
-        found_player = create_new_player(player_id) # Give player default rank: Bronze and Bronze points.
-        # player doesnt exist exection !!!!!! 
-
-    team_A, team_B = bring_api_teams_by_match_id(match_id)
-    winner_team = found_match.winner_team # equipoganadorID
-    
-    # List of players by team: calls for team_service
-
-    if is_player_in_match(found_player.id, found_match.players_list):
-        ranking_data = calculate_ranking(found_player, winner_team, team_A, team_B)
-
-    # Check for player in player match list.
-    def is_player_in_match(target_id, players_list):
-        return target_id in players_list
-    
-    # ranking_data.date = found_match.date
-    return jsonify(ranking_data)
+    return 
 
 # This should birng player's rank based on all matches that player had
 
@@ -71,6 +53,7 @@ def getToken():
 #   canchaID
 #   estado
 #   equipoganadorID: 0 - 1
+    jugadores ? NO
 # }
 
 # PLAYER DATA
