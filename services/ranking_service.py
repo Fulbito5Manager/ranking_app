@@ -40,14 +40,21 @@ def calculate_player_ranking(match_id):
                 player_db_data = create_new_player(player_id)
                 add_player_to_db(player_db_data)
 
+            
             player_db_data.points = points + player_db_data.points
             #try and except
-            rank = determine_rank(points)
+            rank = determine_rank(player_db_data.points)
+            player_db_data.rank = rank
             
-            print("see if works:", points, rank)
-
-            # return {'rank': player_data.rank, 'points': player_data.points}
+            print("Points added + rank:", points, rank)
             print('rank: ',player_db_data.rank, 'points: ',player_db_data.points, "player id: ", player_id, "team :", team_id)
+
+            # return{
+            #     'rank':player_db_data.rank,
+            #     'points': player_db_data.points,
+            #     'player_id': player_id,
+            #     'team_id': team_id,
+            # }
 
 def get_ranking(match_result, total_player_per_team, rankings_teamA, rankings_teamB):
 

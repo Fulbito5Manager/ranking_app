@@ -17,7 +17,7 @@ def get_matches(jwt):
         'Authorization': f'Bearer {jwt}'
     }
     
-    response = requests.get(f'{MATCH_SERVICE_URL}api/partidos', headers=headers)
+    response = requests.get(f'{MATCH_SERVICE_URL}/api/partidos', headers=headers)
     return response.json()
 
 def retrieve_token():
@@ -55,8 +55,10 @@ def get_winner_team_id_by_match_id(match_id = "",  jwt= ""):
     headers = {
         'Authorization': f'Bearer {jwt}'
     }
+
+    print("it gets here and then stops.")
     
-    response = requests.get(f'{MATCH_SERVICE_URL}api/partidos/{match_id}', headers=headers)
+    response = requests.get(f'{MATCH_SERVICE_URL}/api/partidos/{match_id}', headers=headers)
     data = response.json()
 
     winner_team_id = data['equipoGanadorID']

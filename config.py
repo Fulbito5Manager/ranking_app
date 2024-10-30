@@ -4,8 +4,8 @@ MATCH_SERVICE_URL = 'http://localhost:8080'  # CHANGE
 # USER_SERVICE_TOKEN
 # USER_SERVICE_PASSWORD
 
-BOOTSTRAP_SERVER_RUNNING = 'localhost:9092'
-KAFKA_GROUP_ID = 'ranking-group'
+BOOTSTRAP_SERVER_RUNNING = "localhost:9092"
+KAFKA_GROUP_ID = "ranking-group"
 
 class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'

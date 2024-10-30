@@ -33,4 +33,4 @@ def create_app(config_name=None):
 def create_database(app):
     with app.app_context():
         db.create_all()  # Re-create tables after dropping them
-    print('Dropped and Created Database!')
+    # print('Dropped and Created Database!')

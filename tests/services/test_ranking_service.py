@@ -137,10 +137,3 @@ class TestRankingService(TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-# In case of a win "0, 1" string in case of a tie None
-
-
-# def metodo-a-probar_la-condicion_resultado():
-#     calcular ranking/ victoria / suma punts player
-
