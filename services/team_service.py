@@ -1,5 +1,5 @@
 import requests, random
-from config import PLAYER_SERVICE_URL
+from settings import PLAYER_SERVICE_URL
 
 def get_team_by_id(team_id, match_id = "",  jwt= ""):
     headers = {
@@ -26,12 +26,6 @@ def get_team_by_player(player, match_id):
     team_a_data, team_b_data = get_teams_data_by_match_id(match_id)
     player_team = team_a_data['id'] if (player.id in team_a_data['id']) else team_b_data['id']
 
-    # if player.id in team_a_id:
-    #     player_team = team_a_id;
-    # else:
-    #     player_team = team_b_id;
-
-    # player_team = random.randint(1, 2) # just for testing
     return player_team
 
 def get_teamplayers_by_team_id(team_id):

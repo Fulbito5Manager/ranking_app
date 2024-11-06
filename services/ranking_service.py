@@ -40,8 +40,7 @@ def calculate_player_ranking(match_id):
                 player_db_data = create_new_player(player_id)
                 add_player_to_db(player_db_data)
 
-            
-            player_db_data.points = points + player_db_data.points
+            player_db_data.update_ranking(points)
             #try and except
             rank = determine_rank(player_db_data.points)
             player_db_data.rank = rank

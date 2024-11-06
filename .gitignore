@@ -8,3 +8,6 @@ instance/database.db
 __pycache__/
 instance/
 errors.txt
+.venv
+.vscode
+.pytest_cache

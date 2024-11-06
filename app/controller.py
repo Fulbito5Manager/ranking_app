@@ -14,35 +14,17 @@ date.
 
 """
 
-@ranking_controller.route('/rank/<int:match_id>', methods=['GET'])
-def get_rank_by_match_id(match_id, player_id):
-
-    # I could add points gained based on match id.
-
-    return 
-
-# This should birng player's rank based on all matches that player had
-
-#  TOO MUCH RESPONSABILITY  ONLY GIVES BASIC INFO : RANK AND POINTS.
-@ranking_controller.route('/rank/<int:player_id>', methods=['GET']) # ID or User, whatever
+@ranking_controller.route('api/ranking/<int:player_id>', methods=['GET']) # ID or User, whatever
 def get_rank_by_id(player_id):
 
     found_player = is_player_indb(player_id)
 
-    return {"rank": found_player.points, "points": found_player.points}
+    if found_player:
+        return {"rank": found_player.points, "points": found_player.points}
+
+    return {"error": "Player not found."}
     
-    # MATCH DATA
-
-    # Here we have an issue, how do I know whats the match they played?
-    # Im considering adding a service dad UPDATES matches. So if there are missing matches it will update player stasts
-    # UPDATE will check if num of matches player participated = matches recorded in database 
-    # We compare if (=) do nothing else UPDATE
-    # UPDATE brings all matches from API.Partidos with the filtered ID.
-
-def getToken():
-    response = requests.post('http://127.0.0.1:5000/login', json={'username': 'pet1', 'password': '123'})
-    return response.json()['token']
-
+    
 """
 # MATCH DATA
 

@@ -1,24 +1,30 @@
 import requests
-from config import MATCH_SERVICE_URL
+from settings import MATCH_SERVICE_URL
 from models.match_model import Match
 from utils.db import db
 from services.team_service import get_team_by_id
 import logging
 
+# def bring_api_teams_by_match_id():
+
+#         # TEAM DATA
+
+#         # api/equipos/{id}
+#         # {
+#         # "id":0,
+#         # "tipo": "string",
+#         # "partido.Id": 0,
+#         # "jugadores": [0, 1, 2, 3]
+#         # }
+    
+#         team_A = get_team_by_id(0)['players']
+#         team_B = get_team_by_id(1)['players']
+#         return team_A, team_B
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)  # You can change the level to DEBUG for more detailed logs
 logger = logging.getLogger(__name__)
 
-def get_matches(jwt):
-    
-    jwt =  retrieve_token() # llamar a token service // verlo por postman primero
-    
-    headers = {
-        'Authorization': f'Bearer {jwt}'
-    }
-    
-    response = requests.get(f'{MATCH_SERVICE_URL}/api/partidos', headers=headers)
-    return response.json()
 
 def retrieve_token():
     response = requests.post('/login', json={'username': '123', 'password': '123'})
@@ -48,36 +54,40 @@ def create_match(data):
     
     db.session.add(match)
     db.session.commit()
-
+    
     return match
 
 def get_winner_team_id_by_match_id(match_id = "",  jwt= ""):
-    headers = {
-        'Authorization': f'Bearer {jwt}'
-    }
+    # headers = {
+    #     'Authorization': f'Bearer {jwt}'
+    # }
 
-    print("it gets here and then stops.")
+    # print("it gets here and then stops.")
     
-    response = requests.get(f'{MATCH_SERVICE_URL}/api/partidos/{match_id}', headers=headers)
+    response = requests.get(f'{MATCH_SERVICE_URL}/api/partidos/{match_id}')
+
+    # headers = request.headers
+    # if Security.verify_token(response.headers):
+    #     return response.json()
+    # return {"Error":"Invalid token"}, 401
+
+    # if response.ok:
+
     data = response.json()
-
     winner_team_id = data['equipoGanadorID']
-
     return winner_team_id
-
-
-# def bring_api_teams_by_match_id():
-
-#         # TEAM DATA
-
-#         # api/equipos/{id}
-#         # {
-#         # "id":0,
-#         # "tipo": "string",
-#         # "partido.Id": 0,
-#         # "jugadores": [0, 1, 2, 3]
-#         # }
     
-#         team_A = get_team_by_id(0)['players']
-#         team_B = get_team_by_id(1)['players']
-#         return team_A, team_B
+    # return {"Bad request"}, 400
+
+def get_matches(jwt):
+    
+    response = requests.get(f'{MATCH_SERVICE_URL}/api/partidos')
+
+    # headers = request.headers
+    # if Security.verify_token(response.headers):
+    #     return response.json()
+    # return {"Error":"Unauthorized"}, 401
+
+    return response.json()
+
+

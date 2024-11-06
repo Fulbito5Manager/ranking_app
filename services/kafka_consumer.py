@@ -2,7 +2,7 @@ from confluent_kafka import Consumer, KafkaError
 import requests, json
 from services.match_service import create_match, get_winner_team_id_by_match_id
 from services.player_service import bring_old_and_new_players, calculate_player_ranking
-from config import BOOTSTRAP_SERVER_RUNNING, KAFKA_GROUP_ID
+from settings import BOOTSTRAP_SERVER_RUNNING, KAFKA_GROUP_ID
 import threading
 from app import create_app
 from models.player_model import Player
@@ -37,8 +37,6 @@ def handle_partidos_update(match_event_data): # I will only get Partido ID
 
         if match_status == MATCH_STATUS_FINISHED:
             print("Handle partido update message received. match_event_data: ", match_event_data)
-
-
             calculate_player_ranking(match_event_data['partidoID'])
 
     except Exception as e:
