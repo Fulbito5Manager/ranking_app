@@ -1,7 +1,7 @@
 from confluent_kafka import Consumer, KafkaError
 import requests, json
 from services.match_service import create_match, get_winner_team_id_by_match_id
-from services.player_service import bring_old_and_new_players, calculate_player_ranking
+from services.player_service import calculate_player_ranking
 from settings import BOOTSTRAP_SERVER_RUNNING, KAFKA_GROUP_ID
 import threading
 from app import create_app
@@ -51,19 +51,16 @@ def consume_loop():
                 continue
 
             if message.error():
-                # Si es el final de la partición, lo manejamos y continuamos
                 if message.error().code() == KafkaError._PARTITION_EOF:
                     print(f"End of partition reached {message.topic()} [{message.partition()}] at offset {message.offset()}")
                     continue
                 else:
-                    # Si es otro tipo de error, lo mostramos y rompemos el loop
                     print(f"Error: {message.error()}")
                     break
 
-            # Use the app context to handle the message
             with app.app_context():
                 try:
-                    consume_message(message)  # Your message processing logic
+                    consume_message(message)
                 except Exception as e:
                     print(f"Error handling message: {str(e)}")
 

@@ -1,6 +1,5 @@
-from flask import request, jsonify, blueprints, Blueprint
+from flask import Blueprint
 from services.ranking_service import calculate_player_ranking
-import requests
 from services.player_service import is_player_indb, create_new_player
 from services.match_service import is_match_indb
 
@@ -16,15 +15,10 @@ date.
 
 @ranking_controller.route('api/ranking/<int:player_id>', methods=['GET']) # ID or User, whatever
 def get_rank_by_id(player_id):
-
     found_player = is_player_indb(player_id)
-
     if found_player:
         return {"rank": found_player.points, "points": found_player.points}
-
     return {"error": "Player not found."}
-    
-    
 """
 # MATCH DATA
 
