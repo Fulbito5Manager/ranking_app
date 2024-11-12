@@ -33,7 +33,7 @@ def handle_partidos_update(match_event_data):
         event_type = match_event_data.get('Event_type')
         
         if event_type == EVENTTYPE_MATCH_FINISHED:
-            match_id = match_event_data['data'].get('partidoID')
+            match_id = match_event_data['data'].get('Match_id')
             calculate_player_ranking(match_id)
         else:
             print(f"Error handling partido update: {e}")
@@ -90,3 +90,10 @@ def start_kafka_consumer():
     consumer_thread = threading.Thread(target=consume_loop)
     consumer_thread.daemon = True  # Para que se cierre cuando la app Flask se cierre
     consumer_thread.start()
+
+# {
+#     Event_type: MATCH_FINISHED, 
+#     data:{
+#         Match_id: 1
+#     }
+# }
