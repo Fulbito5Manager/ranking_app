@@ -11,3 +11,4 @@ errors.txt
 .venv
 .vscode
 .pytest_cache
+.env

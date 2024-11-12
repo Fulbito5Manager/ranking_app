@@ -9,7 +9,7 @@ from models.player_model import Player
 
 app = create_app()
 
-MATCH_STATUS_FINISHED = "finished"
+EVENTTYPE_MATCH_FINISHED = "MATCH_FINISHED"
 
 # Consumer setup
 consumer = Consumer({
@@ -26,18 +26,17 @@ def get_message_from_kafka(consumer, timeout=1.0):
     """ A wrapper to poll a message from Kafka """
     return consumer.poll(timeout=timeout)
 
-def handle_partidos_update(match_event_data): # I will only get Partido ID
+def handle_partidos_update(match_event_data):
 
-    # print("Handle partido update message received. match_event_data: ", match_event_data)
-    print(match_event_data)
+
     try:
-        match_status = match_event_data.get('estado')
+        event_type = match_event_data.get('Event_type')
         
-        # print("Handle partido update message received. match_event_data: ", match_event_data['partidoID'])
-
-        if match_status == MATCH_STATUS_FINISHED:
-            print("Handle partido update message received. match_event_data: ", match_event_data)
-            calculate_player_ranking(match_event_data['partidoID'])
+        if event_type == EVENTTYPE_MATCH_FINISHED:
+            match_id = match_event_data['data'].get('partidoID')
+            calculate_player_ranking(match_id)
+        else:
+            print(f"Error handling partido update: {e}")
 
     except Exception as e:
         print(f"Error handling partido update: {e}")

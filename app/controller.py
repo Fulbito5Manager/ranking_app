@@ -1,6 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from services.ranking_service import calculate_player_ranking
-from services.player_service import is_player_indb, create_new_player
+from services.player_service import is_player_indb, create_new_player, add_player_to_db
 from services.match_service import is_match_indb
 
 ranking_controller = Blueprint('ranking_controller', __name__)
@@ -13,16 +13,30 @@ date.
 
 """
 
-@ranking_controller.route('api/ranking/<int:player_id>', methods=['GET']) # ID or User, whatever
+@ranking_controller.route('/api/ranking/<int:player_id>', methods=['GET']) # ID or User, whatever
 def get_rank_by_id(player_id):
     found_player = is_player_indb(player_id)
     if found_player:
         return {"rank": found_player.points, "points": found_player.points}
     return {"error": "Player not found."}
+
+@ranking_controller.route('/api/test-db/<int:player_id>', methods=['POST'])
+def test_db(player_id):
+    try:
+        player = create_new_player(player_id)
+        add_player_to_db(player)
+
+        return jsonify({
+            'status': 'success',
+            'id': player.id,
+            'points': player.points
+        }), 200
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 """
 # MATCH DATA
 
-# api/partido/id
+# api/partido/ids
 # {
 #   match_id
 #   date

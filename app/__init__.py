@@ -1,5 +1,5 @@
 from flask import Flask
-from utils.db import db, DB_NAME
+from utils.db import db, migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from os import path
@@ -24,13 +24,11 @@ def create_app(config_name=None):
     app.register_blueprint(ranking_controller, url_prefix="/")
 
     db.init_app(app)
-    migrate = Migrate(app, db)  # Set up Flask-Migrate
+    migrate.init_app(app, db)  # Set up Flask-Migrate
 
     return app
 
-# Import the views, controllers, and models to register them with the app
-
-def create_database(app):
-    with app.app_context():
-        db.create_all()  # Re-create tables after dropping them
-    # print('Dropped and Created Database!')
+# def create_database(app):
+#     with app.app_context():
+#         db.create_all()  # Re-create tables after dropping them
+#     # print('Dropped and Created Database!')

@@ -25,7 +25,11 @@ services:
       - "5000:5000"
     volumes:
       - .:/usr/src/app
+      - ./app/instance:/app/instance
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=development
+      - FLASK_RUN_HOST=0.0.0.0
       - SECRET_KEY=milanesa
+      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}
+      - SECRET_KEY=${SECRET_KEY}
