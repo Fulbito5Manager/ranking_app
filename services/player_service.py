@@ -2,9 +2,6 @@ import requests
 from settings import PLAYER_SERVICE_URL
 from utils.db import db
 from models.player_model import Player
-from services.team_service import get_team_by_player
-from services.ranking_service import calculate_player_ranking
-from services.rank_utils import is_team_winner
 
 # player_data = {
 #         'id': 3,
@@ -13,16 +10,7 @@ from services.rank_utils import is_team_winner
 
 def get_player_by_id(player_id):
     
-    # headers = {
-    #     'Authorization': f'Bearer {jwt}'
-    # }
-    
     response = requests.get(f'{PLAYER_SERVICE_URL}api/jugadores/{player_id}')
-
-    # headers = request.headers
-    # if Security.verify_token(response.headers):
-    #     return response.json()
-    # return {"Error":"Invalid token"}, 401
 
     return response.json()
 
