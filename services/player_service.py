@@ -1,5 +1,3 @@
-import requests
-from settings import PLAYER_SERVICE_URL
 from utils.db import db
 from models.player_model import Player
 
@@ -8,33 +6,43 @@ from models.player_model import Player
 #         'username': "user"
 #     }
 
-def get_player_by_id(player_id):
+# def get_player_by_id(player_id):
     
-    response = requests.get(f'{PLAYER_SERVICE_URL}api/jugadores/{player_id}')
+#     response = requests.get(f'{PLAYER_SERVICE_URL}api/jugadores/{player_id}')
 
-    return response.json()
+#     return response.json()
 
 def is_player_indb(id):
     return Player.query.filter_by(id=id).first()
 
+class PlayerLimitReachedException(Exception):
+    pass
     
 def create_new_player(id):
-    starting_points = 50
-    starting_rank = "Bronze"
-    new_player = Player(id=id, points=starting_points, rank=starting_rank)
-    return new_player
+
+    limit = 50
+
+    try:
+        if id <= limit:
+            starting_points = 50
+            starting_rank = "Bronze"
+            new_player = Player(id=id, points=starting_points, rank=starting_rank)
+            return new_player
+        else:
+            raise PlayerLimitReachedException("Reached limit amount of players allowed.")
+    except Exception as e:
+        print("Failed to instance player: ", e)
+        return None
 
 def add_player_to_db(new_player):
-
     try:
         db.session.add(new_player)
         db.session.commit() 
         
     except Exception as e:
-        print("Could not add to DB:", e)
-    
-    finally:
         db.session.rollback()
+        print("Could not add to DB:", e)
+
 
 # HANDLE NEW PLAYERS AND OLD PLAYERS
 

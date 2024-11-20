@@ -1,3 +1,5 @@
+from models.player_model import Player
+
 def determine_rank(points):
     # Simplified rank determination logic // Needs modification
     if points > 150:
@@ -11,20 +13,29 @@ def determine_rank(points):
 
 def get_rank_by_players_id(team, player_data=""):
         
-        from models.player_model import Player
-        team_ranking_points = []
+        if team:
+            
+            try:
+                team_ranking_points = []
+                for player_id in team:
 
-        for player_id in team:
-            player = Player.query.filter_by(id=player_id).first()
+                        player = Player.query.filter_by(id=player_id).first()
 
-            if player: 
-                team_ranking_points.append(player.points)
-            # if player_id == player_data['id']:
-            #     team_ranking_points.append(player_data['points'])  # Use provided player_data for the specific player so mock data dont overwrite player_data
-            # else:
-            #     other_player_data = get_player_by_id(player_id)  # Fetch data for other players
-            #     team_ranking_points.append(other_player_data['points'])
-        return team_ranking_points
+                        if player: 
+                            team_ranking_points.append(player.points)
+
+                        else:
+                            raise Exception("Missing Player.")
+                            
+                return team_ranking_points
+                
+            except Exception as e:
+                print("Could not fetch player:", e)
+                return None
+            
+        else:
+            print("Team invdalid data.")
+            return None
 
 def is_team_winner(winner_team_id, team_id):
         match_result= ""
