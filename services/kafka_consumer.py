@@ -1,25 +1,21 @@
 from confluent_kafka import Consumer, KafkaError
-import requests, json
-from services.match_service import create_match, get_winner_team_id_by_match_id
-from services.player_service import calculate_player_ranking
+import json
+from services.ranking_service import calculate_player_ranking
 from settings import BOOTSTRAP_SERVER_RUNNING, KAFKA_GROUP_ID
 import threading
 from app import create_app
-from models.player_model import Player
 
 app = create_app()
 
 EVENTTYPE_MATCH_FINISHED = "MATCH_FINISHED"
 
-# Consumer setup
 consumer = Consumer({
     'bootstrap.servers': BOOTSTRAP_SERVER_RUNNING,
     'group.id': KAFKA_GROUP_ID,
     'auto.offset.reset': 'earliest'
 })
 
-# Subscribe to the topics
-topics = ['partidos-updates'] #'equipos-updates', "jugadores-service-update", jugadores-service-update
+topics = ['partidos-updates']
 consumer.subscribe(topics)
 
 def get_message_from_kafka(consumer, timeout=1.0):
@@ -27,8 +23,6 @@ def get_message_from_kafka(consumer, timeout=1.0):
     return consumer.poll(timeout=timeout)
 
 def handle_partidos_update(match_event_data):
-
-
     try:
         event_type = match_event_data.get('Event_type')
         
@@ -44,7 +38,6 @@ def handle_partidos_update(match_event_data):
 def consume_loop():
     try:
         while True:
-            # print("Listening messages, in loop.")
             message = get_message_from_kafka(consumer)
             if message is None:
                 continue
@@ -62,7 +55,6 @@ def consume_loop():
                     consume_message(message)
                 except Exception as e:
                     print(f"Error handling message: {str(e)}")
-
     finally:
         consumer.close()
 
@@ -73,7 +65,6 @@ def consume_message(message):
         if raw_data is None:
             print("Received an empty message.")
             return
-        
         # Deserialize the message value
         data = json.loads(message.value().decode('utf-8'))
         print('data:', data)

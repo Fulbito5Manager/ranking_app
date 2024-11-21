@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify
 from services.ranking_service import calculate_player_ranking
 from services.player_service import is_player_indb, create_new_player, add_player_to_db
-from services.match_service import is_match_indb
 
 ranking_controller = Blueprint('ranking_controller', __name__)
 

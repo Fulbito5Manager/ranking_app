@@ -1,20 +1,25 @@
 from models.player_model import Player
 
 def determine_rank(points):
-    # Simplified rank determination logic // Needs modification
-    if points > 150:
-        return 'Gold'
-    elif points > 100:
-        return 'Silver'
-    elif points > 50:
-        return 'Bronze'
-    else:
-        return 'Iron'
+    try:
+        if points < 0:
+            points = 0;
+    
+        if points > 150:
+            return 'Gold'
+        elif points > 100:
+            return 'Silver'
+        elif points > 50:
+            return 'Bronze'
+        else:
+            return 'Iron'
+    except Exception as e:
+        print("Points is not a valid data: ", e)
+        return None
 
 def get_rank_by_players_id(team, player_data=""):
         
         if team:
-            
             try:
                 team_ranking_points = []
                 for player_id in team:
@@ -40,10 +45,15 @@ def get_rank_by_players_id(team, player_data=""):
 def is_team_winner(winner_team_id, team_id):
         match_result= ""
 
-        if team_id == winner_team_id:
-            match_result = "W"  # Win
-        elif winner_team_id == None:
-            match_result = "Tie"
+        if winner_team_id != "":
+
+            if team_id == winner_team_id:
+                match_result = "W"  # Win
+            elif winner_team_id == None:
+                match_result = "Tie"
+            else:
+                match_result = "L"  # Loss
+            return match_result
         else:
-            match_result = "L"  # Loss
-        return match_result
+            print("Could not get result from empty string.")
+            return None

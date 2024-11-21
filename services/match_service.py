@@ -1,7 +1,5 @@
 import requests
 from settings import MATCH_SERVICE_URL
-from models.match_model import Match
-from utils.db import db
 import logging
 
 # def bring_api_teams_by_match_id():
@@ -23,7 +21,6 @@ import logging
 # Configure logging
 logging.basicConfig(level=logging.INFO)  # You can change the level to DEBUG for more detailed logs
 logger = logging.getLogger(__name__)
-
 
 # def is_match_indb(id):
 #     return Match.query.filter_by(id=id).first()
@@ -52,12 +49,17 @@ logger = logging.getLogger(__name__)
     
 #     return match
 
-def get_winner_team_id_by_match_id(match_id = "",  jwt= ""):
-    
-    response = requests.get(f'{MATCH_SERVICE_URL}/api/partidos/{match_id}')
-
-    data = response.json()
-    winner_team_id = data['equipoGanadorID']
-    return winner_team_id
+def get_winner_team_id_by_match_id(match_id="", jwt=""):
+    url = f'{MATCH_SERVICE_URL}/api/partidos/{match_id}'
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise HTTPError for bad responses
+        data = response.json()
+        return data.get('equipoGanadorID')
+    except requests.exceptions.RequestException as e:
+        print(f"HTTP error: {e}")
+    except ValueError as e:
+        print(f"Error decoding JSON: {e}")
+    return None
 
 

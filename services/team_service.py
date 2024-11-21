@@ -19,7 +19,7 @@ class CouldNotFetchData(Exception):
 def get_teams_data_by_match_id(match_id):
 
     try:
-        response = requests.get(f'{PLAYER_SERVICE_URL}api/equipos/partido/{match_id}'); # headers=headers # team service url
+        response = requests.get(f'{PLAYER_SERVICE_URL}/api/equipos/partido/{match_id}'); # headers=headers # team service url
         match_data = response.json()
         
         if match_data:

@@ -21,7 +21,6 @@ class PlayerLimitReachedException(Exception):
 def create_new_player(id):
 
     limit = 50
-
     try:
         if id <= limit:
             starting_points = 50
