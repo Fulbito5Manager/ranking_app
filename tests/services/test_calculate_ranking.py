@@ -66,7 +66,7 @@ class TestCalculateRanking(unittest.TestCase):
     @patch('services.rank_utils.determine_rank')
     @patch('services.player_service.add_player_to_db')
     @patch('services.player_service.create_new_player')
-    def test_handle_calculate_ranking_team_winning_24(self, mock_create_new_player, mock_add_player_to_db, mock_determine_rank, mock_get_rank_by_players_id, mock_is_player_indb, mock_get_teams_data_by_match_id, mock_get_winner_team_id_by_match_id):
+    def test_handle_calculate_ranking_win_team_other_than_1or2(self, mock_create_new_player, mock_add_player_to_db, mock_determine_rank, mock_get_rank_by_players_id, mock_is_player_indb, mock_get_teams_data_by_match_id, mock_get_winner_team_id_by_match_id):
         
         # Mock external service data
         mock_get_winner_team_id_by_match_id.return_value = 24
@@ -95,12 +95,9 @@ class TestCalculateRanking(unittest.TestCase):
 
         match_id = 1
 
-        result = calculate_player_ranking(match_id)  # This is the function you're testing
+        calculate_player_ranking(match_id)  # This is the function you're testing
 
-        self.assertIsNotNone(result)
-        # self.assertEqual(result['rank'], 'Gold')
-        # self.assertEqual(result['points'], 20)  # Adjust based on expected points logic
-
+        mock_add_player_to_db.assert_called()
         print("Test completed successfully.")
 
     """
@@ -133,7 +130,7 @@ class TestCalculateRanking(unittest.TestCase):
         mock_create_new_player.side_effect = lambda id: Player(id=id, points=50, rank="Bronze")
 
         # Mock the add_player_to_db to just simulate adding without actual DB operation
-        mock_add_player_to_db.side_effect = lambda player: None  # Simulate a no-op
+        mock_add_player_to_db.  side_effect = lambda player: None  # Simulate a no-op
 
         mock_get_rank_by_players_id.side_effect = [
             [50, 60, 70, 80, 90],  # Team A player rankings
@@ -143,9 +140,10 @@ class TestCalculateRanking(unittest.TestCase):
 
         match_id = 1
 
-        result = calculate_player_ranking(match_id)  # This is the function you're testing
+        calculate_player_ranking(match_id)  # This is the function you're testing
 
-        self.assertIsNotNone(result)
+        # self.assertIsNotNone(result)
+        mock_add_player_to_db.assert_called()
         print("Test completed successfully.")
 
     if __name__ == '__main__':

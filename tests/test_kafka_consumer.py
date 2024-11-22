@@ -52,39 +52,64 @@ class TestKafkaConsumer(unittest.TestCase):
 
         # Call the consume_message function with the mocked message
         consume_message(mock_message)
+        
 
-    """
+    @patch('services.kafka_consumer.get_message_from_kafka')  # Mock the wrapper function
+    def test_consume_message_empty_message(self, mock_get_message):
+        # Construct valid JSON using Python objects
+        event_data = {
+            "Event_type": "MATCH_FINISHED",
+            "data": {  
+            }
+        }
+        # Mock Kafka message with valid JSON
+        mock_message = MagicMock()
+        mock_message.value.return_value = json.dumps(event_data).encode('utf-8')
+        mock_message.topic.return_value = 'partidos-updates'
+        mock_message.error.return_value = None
+
+        # Set the mock to return the fake message
+        mock_get_message.return_value = mock_message
+
+        # Call the consume_message function with the mocked message
+        consume_message(mock_message)
     
-    Checks for components in Kafka and db at the same time.
+    @patch('services.kafka_consumer.get_message_from_kafka')  # Mock the wrapper function
+    def test_consume_message_invalid_event_type(self, mock_get_message):
+        # Construct valid JSON using Python objects
+        event_data = {
+            "Event_type": "MATCH_CANCELED",
+            "data": {  
+            }
+        }
+        # Mock Kafka message with valid JSON
+        mock_message = MagicMock()
+        mock_message.value.return_value = json.dumps(event_data).encode('utf-8')
+        mock_message.topic.return_value = 'partidos-updates'
+        mock_message.error.return_value = None
 
-    INTEGRATION TEST. Integrating static code with a service. 
+        # Set the mock to return the fake message
+        mock_get_message.return_value = mock_message
 
-    PRODUCER IDEA
+        # Call the consume_message function with the mocked message
+        consume_message(mock_message)
 
-    """
+    @patch('services.kafka_consumer.get_message_from_kafka')  # Mock the wrapper function
+    def test_consume_message_invalid_json_data(self, mock_get_message):
+        # Construct valid JSON using Python objects
+        event_data = None
+        # Mock Kafka message with valid JSON
+        mock_message = MagicMock()
+        mock_message.value.return_value = None
+        mock_message.topic.return_value = 'partidos-updates'
+        mock_message.error.return_value = None
 
-    # @patch('services.kafka_consumer.get_message_from_kafka')
-    # def test_kafka_event_and_db(self, mock_get_message):
-    #     # Step 1: Mock Kafka consumer to send a test event
-    #     with current_app.app_context():
+        # Set the mock to return the fake message
+        mock_get_message.return_value = mock_message
 
-    #         mock_message = MagicMock()
-    #         mock_message.topic.return_value = 'partidos-updates'
-    #         # Correct JSON string with escaped quotes for inner JSON
-    #         mock_message.value.return_value = b'{"Event_type": "MATCH_FINISHED", "data": "{\\"Match_id\\": 1, \\"date\\": \\"2024-09-06\\", \\"equipoganadorID\\": 2, \\"estado\\": \\"finished\\"}"}'
-    #         mock_message.error.return_value = None
-            
-    #         # mock_kafka_consumer.return_value.poll.return_value = [mock_event]
-    #         mock_get_message.return_value = mock_message
-    #         # Step 2: Call the consumer function
-    #         consume_message(mock_message)
+        # Call the consume_message function with the mocked message
+        consume_message(mock_message)
 
-    #         # Step 3: Verify the event was processed and stored in the database
-    #         match = Match.query.filter_by(id=1).first()
-
-    #         assert match is not None
-    #         assert match.players_list == [1, 2, 3]
-    #         # assert match.status == 'finished'
 
 if __name__ == '__main__':
     unittest.main()

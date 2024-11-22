@@ -11,7 +11,7 @@ class Match(db.Model):
     # players_list = db.Column(db.JSON)
     status = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, id, winner_team, date, players_list, status):
+    def __init__(self, id, winner_team, date, status):
         self.id = id
         self.winner_team = winner_team 
         self.date = date

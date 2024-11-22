@@ -11,7 +11,6 @@ def calculate_player_ranking(match_id):
     #VALIDATIONS
 
     # Don't bring negative values. Return 0
-
     winner_team_id = get_winner_team_id_by_match_id(match_id)
     team_a_data, team_b_data = get_teams_data_by_match_id(match_id)
 
@@ -46,7 +45,7 @@ def calculate_player_ranking(match_id):
             player_db_data.rank = rank
             
             print("Points added + rank:", points, rank)
-            print('rank: ',player_db_data.rank, 'points: ',player_db_data.points, "player id: ", player_id, "team :", team_id)
+            print('rank: ', player_db_data.rank, 'points: ',player_db_data.points, "player id: ", player_id, "team :", team_id)
 
             # return{
             #     'rank':player_db_data.rank,

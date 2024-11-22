@@ -1,11 +1,17 @@
 from flask import Flask
-# from services.kafka_consumer import consumer
-# from app.controller import ranking_controller
-from app import create_app
 from services.kafka_consumer import start_kafka_consumer
+from app import create_app
+import threading
 
 app = create_app()
 
-if __name__ == '__main__':
+def run_kafka_consumer():
     start_kafka_consumer()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+
+if __name__ == '__main__':
+    # Start Kafka consumer in a separate thread
+    consumer_thread = threading.Thread(target=run_kafka_consumer)
+    consumer_thread.start()
+    
+    # Run Flask app
+    app.run(debug=True)

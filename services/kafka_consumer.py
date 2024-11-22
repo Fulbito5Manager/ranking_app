@@ -1,21 +1,23 @@
+import os
+
 from confluent_kafka import Consumer, KafkaError
 import json
 from services.ranking_service import calculate_player_ranking
-from settings import BOOTSTRAP_SERVER_RUNNING, KAFKA_GROUP_ID
+from settings import KAFKA_GROUP_ID, EVENTTYPE_MATCH_FINISHED, BOOTSTRAP_SERVER_RUNNING
 import threading
 from app import create_app
 
 app = create_app()
 
-EVENTTYPE_MATCH_FINISHED = "MATCH_FINISHED"
-
 consumer = Consumer({
-    'bootstrap.servers': BOOTSTRAP_SERVER_RUNNING,
-    'group.id': KAFKA_GROUP_ID,
-    'auto.offset.reset': 'earliest'
+    'bootstrap.servers': os.getenv(BOOTSTRAP_SERVER_RUNNING, BOOTSTRAP_SERVER_RUNNING),
+    'group.id': os.getenv(KAFKA_GROUP_ID, KAFKA_GROUP_ID),
+    'auto.offset.reset': 'earliest',
+    'security.protocol': 'PLAINTEXT',
+    'metadata.broker.list': BOOTSTRAP_SERVER_RUNNING,
 })
 
-topics = ['partidos-updates']
+topics = ['match_service_topic']
 consumer.subscribe(topics)
 
 def get_message_from_kafka(consumer, timeout=1.0):
@@ -24,13 +26,14 @@ def get_message_from_kafka(consumer, timeout=1.0):
 
 def handle_partidos_update(match_event_data):
     try:
-        event_type = match_event_data.get('Event_type')
-        
+        event_type = match_event_data['eventType']
+
         if event_type == EVENTTYPE_MATCH_FINISHED:
-            match_id = match_event_data['data'].get('Match_id')
-            calculate_player_ranking(match_id)
+            match_id = json.loads(match_event_data['data'])
+            print(match_id)
+            # calculate_player_ranking(match_id)
         else:
-            print(f"Error handling partido update: {e}")
+            print(f"Error Invalid event-type")
 
     except Exception as e:
         print(f"Error handling partido update: {e}")
@@ -69,10 +72,8 @@ def consume_message(message):
         data = json.loads(message.value().decode('utf-8'))
         print('data:', data)
 
-        # Handle the message based on the topic
-        if message.topic() == 'partidos-updates':
+        if message.topic() == 'match_service_topic':
             handle_partidos_update(data)
-        # Add more conditions if needed for other topics
 
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
