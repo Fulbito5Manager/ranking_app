@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from unittest.mock import MagicMock, patch
 import unittest
-from services.kafka_consumer import consume_message
+from kafka_handler.kafka_consumer import consume_message
 from models.match_model import Match
 from flask import current_app
 from app import create_app  # Import your app creation method
@@ -41,16 +41,14 @@ class TestKafkaConsumer(unittest.TestCase):
                 "estado": "finished"
             }
         }
-        # Mock Kafka message with valid JSON
+
         mock_message = MagicMock()
         mock_message.value.return_value = json.dumps(event_data).encode('utf-8')
         mock_message.topic.return_value = 'partidos-updates'
         mock_message.error.return_value = None
 
-        # Set the mock to return the fake message
         mock_get_message.return_value = mock_message
 
-        # Call the consume_message function with the mocked message
         consume_message(mock_message)
         
 
