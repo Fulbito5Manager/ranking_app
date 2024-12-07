@@ -1,20 +1,48 @@
-# Use an official Python runtime as a parent image
-FROM python:3.12.4
+# Stage 1: Build Stage
+FROM python:3.12.4 AS build
 
-# Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy the requirements file into the container
+# Copy requirements file and install dependencies
 COPY requirements.txt ./
-
-# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install SQLite3
-RUN apt-get update && apt-get install -y sqlite3
-
-# Copy the rest of the application into the container
+# Copy the application code
 COPY . .
 
-# Run the application
+# Stage 2: Runtime Stage
+FROM python:3.12.4-slim
+
+WORKDIR /usr/src/app
+
+# Install runtime dependencies
+RUN pip install --no-cache-dir flask confluent_kafka flask_sqlalchemy flask_migrate python-decouple
+
+# Copy only the necessary files from the build stage
+COPY --from=build /usr/src/app /usr/src/app
+
+# Install SQLite3 for debugging purposes (if necessary)
+# RUN apt-get update && apt-get install -y --no-install-recommends sqlite3 && rm -rf /var/lib/apt/lists/*
+
 CMD ["python", "app.py"]
+
+
+
+
+# FROM python:3.12.4
+
+# WORKDIR /usr/src/app
+
+# COPY requirements.txt ./
+
+# # Install any needed packages specified in requirements.txt
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# # # Install SQLite3
+# # RUN apt-get update && apt-get install -y sqlite3
+
+# COPY . .
+
+# CMD ["python", "app.py"]
+
+
