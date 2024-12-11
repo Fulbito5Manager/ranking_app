@@ -1,5 +1,5 @@
 # Ranking Service
-The application was made with Flask framework connecting with the other services through Kafka consumer. Uses MVC simple architecture and, as said before, has a kafka consumer which constantly checks for new updates on the main services. Additionally, it requests information pharalel to the kafka consumer loop to the respective endpoints of the main services.
+The application was made with Flask framework connecting with the other services through Kafka consumer. Uses an MVC simple architecture and, as said before, has a Kafka consumer which constantly checks for new updates on the main services. Additionally, it requests information parallel to the Kafka consumer loop to the respective endpoints of the main services.
 
 ## Purpose
 The current service will serve as a ranking system that will communicate with the main services(partido_service, jugador_service, equipo_service, etc.). It will provide a personal ranking profile for each individual player. Improving the experience of its users so they can enjoy a more competitive aspect of match making!
@@ -19,7 +19,7 @@ There is a Docker file available to run the app locally, follow these steps. You
     docker-compose up -d
 
 ### **Future improvements**
-Any time soon, we will be working on deploying most of the services as an all-together-app. 
+Any time soon, we will be working on deploying most of the services as an all-together app. 
 
 --------------------------------------------
 ## Techs
