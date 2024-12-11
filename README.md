@@ -11,7 +11,7 @@ The application counts with at least a 80% test coverage over `tests/` folder. I
 
 There is a Docker file available to run the app locally, follow these steps. You can notice the loop will start running due to the logs:
 
-![docker-test-ranking-app](https://www.dropbox.com/scl/fi/7x7b2uzxwn6jm8vdjikd6/docker-fucntioning-example.png?rlkey=2uodwg4wo8o0u690zzayzkypn&st=2suys2rv&dl=1)
+![docker-test-ranking-app](https://dl.dropboxusercontent.com/scl/fi/7x7b2uzxwn6jm8vdjikd6/docker-fucntioning-example.png?rlkey=2uodwg4wo8o0u690zzayzkypn&st=3d98z3jn&dl=1)
 
 1.  **Build and Start the Containers**:
     
