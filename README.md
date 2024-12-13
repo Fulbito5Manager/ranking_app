@@ -5,7 +5,7 @@ The application was made with Flask framework connecting with the other services
 The current service will serve as a ranking system that will communicate with the main services(partido_service, jugador_service, equipo_service, etc.). It will provide a personal ranking profile for each individual player. Improving the experience of its users so they can enjoy a more competitive aspect of match making!
 
 ## Tests
-The application counts with at least a 80% test coverage over `tests/` folder. It also provide examples for edge cases and common possible errors in every service. 
+The application counts with at least an 80% test coverage over `tests/` folder. It also provide examples for edge cases and common possible errors in every service. 
 
 ### **Setup Instructions**
 
